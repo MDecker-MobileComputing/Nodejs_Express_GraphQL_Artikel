@@ -22,7 +22,7 @@ unter der folgenden URL erreichbar ist: http://localhost:8080/graphql
 
 <br>
 
-Alle Artikel zurückgeben:
+Alle Artikel abfragen:
 
 ```
 query {
@@ -85,6 +85,34 @@ mutation {
     name
     preis
     grosskundenrabatt
+  }
+}
+```
+
+<br>
+
+Menge für einen Artikel aktualisiert:
+
+```
+mutation {
+  mengeAktualisieren(artikelId: "3", menge: 42) {
+    id
+    name
+    menge
+  }
+}
+```
+
+<br>
+
+Preis für einen Artikel aktualisiert:
+
+```
+mutation {
+  preisAktualisieren(artikelId: "4", preis: 349.99) {
+    id
+    name
+    preis
   }
 }
 ```

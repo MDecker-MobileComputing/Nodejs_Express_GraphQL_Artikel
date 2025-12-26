@@ -131,6 +131,30 @@ const resolversMutation = {
     logger.info( `Artikel gelöscht: ID=${ artikelId }, Name="${ geloeschterArtikel.name }".` );
 
     return geloeschterArtikel;
+  },
+
+  mengeAktualisieren: ( _, { artikelId, menge } ) => {
+    const artikel = alleArtikelArray.find( a => a.id === artikelId );
+    if ( !artikel ) {
+      logger.warn( `Artikel mit ID=${ artikelId } nicht gefunden.` );
+      return null;
+    }
+
+    artikel.menge = menge;
+    logger.info( `Artikel-Menge aktualisiert: ID=${ artikelId }, Menge=${ menge }.` );
+    return artikel;
+  },
+
+  preisAktualisieren: ( _, { artikelId, preis } ) => {
+    const artikel = alleArtikelArray.find( a => a.id === artikelId );
+    if ( !artikel ) {
+      logger.warn( `Artikel mit ID=${ artikelId } nicht gefunden.` );
+      return null;
+    }
+
+    artikel.preis = preis;
+    logger.info( `Artikel-Preis aktualisiert: ID=${ artikelId }, Preis=${ preis }.` );
+    return artikel;
   }
 };
 
