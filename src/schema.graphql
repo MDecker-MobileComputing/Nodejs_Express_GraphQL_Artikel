@@ -1,0 +1,30 @@
+type Buch {
+
+  id   : ID!
+  titel: String!
+  autor: String!
+  jahr : Int
+  genre: String
+}
+
+
+# "Query" ist der Operationstyp für alle GraphQL-Lese-Anfragen ("R" in "CRUD")
+type Query {
+
+  # alle Buecher holen
+  buecher: [ Buch! ]!
+
+  # Buch anhand ID abfragen
+  buch( id: ID! ): Buch
+
+  # Buch suchen
+  sucheBuch( query: String! ): [Buch!]!
+}
+
+
+# "Mutation" ist der Operationstyp für alle GraphQL-Schreib-Anfragen ("C", "U", "D" in "CRUD")
+type Mutation {
+
+  # Neues Buch hinzufügen
+  buchHinzufuegen( titel: String!, autor: String!, jahr: Int, genre: String ): Buch!
+}

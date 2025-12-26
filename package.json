@@ -1,0 +1,16 @@
+{
+  "name": "nodejs_express_graphql",
+  "version": "1.0.0",
+  "description": "Demo für GraphQL mit Artikeln",
+  "author": "MDecker-MobileComputing",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "graphql-yoga": "^5.18.0",
+    "logging": "^4.2.0"
+  },
+  "scripts": {
+    "start": "node src/main.js"
+  }
+}
