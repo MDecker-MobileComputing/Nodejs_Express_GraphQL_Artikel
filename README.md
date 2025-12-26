@@ -43,7 +43,7 @@ Einzelnen Artikel anhand `ID` abfragen:
 
 ```
 query {
-  artikel(id: "2") {
+  artikel( id: "2" ) {
     id
     name
     beschreibung
@@ -60,7 +60,7 @@ Artikel anhand Suchbegriff suchen:
 
 ```
 query {
-  artikelSuche(query: "monitor") {
+  artikelSuche( query: "monitor" ) {
     id
     name
     preis
@@ -68,6 +68,42 @@ query {
 }
 ```
 
+<br>
+
+Neuen Artikel hinzufügen:
+
+```
+mutation {
+  artikelHinzufuegen(
+    name: "MacBook Air 15"
+    beschreibung: "M3, 16GB, 512GB"
+    menge: 7
+    preis: 1999.0
+    grosskundenrabatt: true
+  ) {
+    id
+    name
+    preis
+    grosskundenrabatt
+  }
+}
+```
+
+<br>
+
+Artikel anhand ID löschen:
+
+```
+mutation {
+  artikelLoeschen(artikelId: "2") {
+    id
+    name
+    preis
+  }
+}
+```
+
+<br>
 
 ----
 

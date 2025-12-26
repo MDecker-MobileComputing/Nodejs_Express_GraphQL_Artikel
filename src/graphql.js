@@ -83,6 +83,7 @@ const resolversQuery = {
   artikel: ( _, {id} ) => alleArtikelArray.find( a => a.id === id ) || null,
 
   artikelSuche: ( _, {query} ) => {
+
         const searchTerm = query.toLowerCase();
         return alleArtikelArray.filter( a =>
           a.name.toLowerCase().includes( searchTerm ) ||
@@ -91,30 +92,50 @@ const resolversQuery = {
       }
 };
 
-/*
+// Hilfsfunktion: nächste numerische ID finden
+const nextArtikelId = () => {
+  const maxId = alleArtikelArray.reduce( (max, a) => Math.max( max, Number( a.id ) || 0 ), 0 );
+  return String( maxId + 1 );
+};
+
+
 const resolversMutation = {
 
-      buchHinzufuegen: ( _, { titel, autor, jahr, genre } ) => {
+  artikelHinzufuegen: ( _, { name, beschreibung, menge, preis, grosskundenrabatt = false } ) => {
 
-        const neueId = String( alleBuecherArray.length + 1 );
-        const neuesBuch = {
-          id: neueId,
-          titel,
-          autor,
-          jahr,
-          genre
-        };
+    const neueId = nextArtikelId();
+    const neuesArtikelObj = {
+      id: neueId,
+      name,
+      beschreibung: beschreibung || "",
+      menge,
+      preis,
+      grosskundenrabatt: Boolean( grosskundenrabatt )
+    };
 
-        alleBuecherArray.push( neuesBuch );
-        logger.info( `Neues Buch hinzugefügt: ID=${ neueId }, Titel="${ titel }".` );
+    alleArtikelArray.push( neuesArtikelObj );
+    logger.info( `Neuer Artikel hinzugefügt: ID=${ neueId }, Name="${ name }".` );
 
-        // Event für Subscription publishen
-        pubsub.publish( "BUCH_HINZUGEFUEGT", { buchHinzugefuegt: neuesBuch } );
+    return neuesArtikelObj;
+  },
 
-        return neuesBuch;
-      }
+  artikelLoeschen: ( _, { artikelId } ) => {
+
+    const idx = alleArtikelArray.findIndex( a => a.id === artikelId );
+    if ( idx === -1 ) {
+      logger.warn( `Artikel mit ID=${ artikelId } nicht gefunden.` );
+      return null;
+    }
+
+    const [ geloeschterArtikel ] = alleArtikelArray.splice( idx, 1 );
+    logger.info( `Artikel gelöscht: ID=${ artikelId }, Name="${ geloeschterArtikel.name }".` );
+
+    return geloeschterArtikel;
+  }
 };
-*/
+
+
+
 
 /*
 const resolversSubscription = {
@@ -129,8 +150,8 @@ export const yoga = createYoga({
   schema: createSchema({
     typeDefs: schemaString,
     resolvers: {
-      Query       : resolversQuery /*,
-      Mutation    : resolversMutation,
+      Query       : resolversQuery,
+      Mutation    : resolversMutation /*,
       Subscription: resolversSubscription
       */
     }
