@@ -1,15 +1,8 @@
-type Warengruppe {
-  id          : ID!
-  name        : String!
-  beschreibung: String
-}
-
 
 type Artikel {
   id               : ID!
   name             : String!
   beschreibung     : String
-  warengruppe      : Warengruppe!
   menge            : Int!
   preis            : Float!
   grosskundenrabatt: Boolean!
@@ -20,30 +13,21 @@ type Artikel {
 type Query {
 
   # alle Artikel holen
-  artikel: [ Artikel! ]!
+  artikelAlle: [ Artikel! ]!
 
   # Artikel anhand ID abfragen
   artikel( id: ID! ): Artikel
 
   # Volltextsuche in Artikel (Name und Beschreibung)
   artikelSuche( query: String! ): [ Artikel! ]!
-
-  # alle Warengruppen holen
-  warengruppen: [ Warengruppe! ]!
-
-  # Warengruppe anhand ID abfragen
-  warengruppe( id: ID! ): Warengruppe
 }
 
 
 # "Mutation" ist der Operationstyp für alle GraphQL-Schreib-Anfragen ("C", "U", "D" in "CRUD")
 type Mutation {
 
-  # Neue Warengruppe hinzufügen
-  warenGruppeHinzufuegen( name: String!, beschreibung: String ): Warengruppe!
-
   # Neuen Artikel hinzufügen
-  artikelHinzufuegen( name: String!, beschreibung: String, warengruppeId: ID!, menge: Int!, preis: Float! ): Artikel!
+  artikelHinzufuegen( name: String!, beschreibung: String, menge: Int!, preis: Float! ): Artikel!
 
   # Artikel-Menge aktualisieren
   mengeAktualisieren( artikelId: ID!, menge: Int! ): Artikel!

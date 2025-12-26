@@ -1,12 +1,11 @@
-import express                      from "express";
-import createLogger                 from "logging";
+import express      from "express";
+import createLogger from "logging";
 
 import { yoga } from "./graphql.js";
 
 const logger = createLogger( "main" );
 
 const PORT_NUMMER = 8080;
-
 
 
 const app = express()
