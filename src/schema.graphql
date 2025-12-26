@@ -28,3 +28,11 @@ type Mutation {
   # Neues Buch hinzufügen
   buchHinzufuegen( titel: String!, autor: String!, jahr: Int, genre: String ): Buch!
 }
+
+
+# "Subscription" ist der Operationstyp für Echtzeit-Updates
+type Subscription {
+
+  # Benachrichtigung wenn ein neues Buch hinzugefügt wird
+  buchHinzugefuegt: Buch!
+}

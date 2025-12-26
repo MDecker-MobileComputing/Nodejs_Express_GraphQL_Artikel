@@ -1,8 +1,10 @@
 import { readFileSync }             from "fs";
 import createLogger                 from "logging";
 import { createSchema, createYoga } from "graphql-yoga";
+import { createPubSub }             from "graphql-yoga";
 
 const logger = createLogger( "graphql" );
+const pubsub = createPubSub();
 
 
 // Schema aus separater Datei einlesen
@@ -74,7 +76,17 @@ const resolversMutation = {
         alleBuecherArray.push( neuesBuch );
         logger.info( `Neues Buch hinzugefügt: ID=${ neueId }, Titel="${ titel }".` );
 
+        // Event für Subscription publishen
+        pubsub.publish( "BUCH_HINZUGEFUEGT", { buchHinzugefuegt: neuesBuch } );
+
         return neuesBuch;
+      }
+};
+
+const resolversSubscription = {
+
+      buchHinzugefuegt: {
+        subscribe: () => pubsub.subscribe( "BUCH_HINZUGEFUEGT" )
       }
 };
 
@@ -83,7 +95,8 @@ export const yoga = createYoga({
     typeDefs: schemaString,
     resolvers: {
       Query: resolversQuery,
-      Mutation: resolversMutation
+      Mutation: resolversMutation,
+      Subscription: resolversSubscription
     }
   })
 });
