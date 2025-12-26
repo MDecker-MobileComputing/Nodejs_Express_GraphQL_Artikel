@@ -1,3 +1,15 @@
+# Schema für API mit "GraphQL SDL" (SDL: Schema Definition Language).
+#
+# Es gibt folgende Datentypen: String, Int, Float, Boolean, ID; die IDs sind unique identifiers (Strings).
+# Ausrufezeichen nach Typ steht für  Not-Null, [typ] für Listen.
+#
+# Werkzeuge:
+# * Syntax-Checker: https://www.leskoff.com/s01929-0
+# * Extension für VSCode: https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql-syntax
+#
+# SDL-Referenz: https://graphql.org/learn/schema/
+#
+# Operationstypen: query, mutation, subscription
 
 type Artikel {
   id               : ID!

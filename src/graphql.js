@@ -116,6 +116,9 @@ const resolversMutation = {
     alleArtikelArray.push( neuesArtikelObj );
     logger.info( `Neuer Artikel hinzugefügt: ID=${ neueId }, Name="${ name }".` );
 
+    // Subscription-Event für neuen Artikel senden
+    pubsub.publish( "ARTIKEL_HINZUGEFUEGT", { artikelHinzugefuegt: neuesArtikelObj } );
+
     return neuesArtikelObj;
   },
 
@@ -142,6 +145,9 @@ const resolversMutation = {
 
     artikel.menge = menge;
     logger.info( `Artikel-Menge aktualisiert: ID=${ artikelId }, Menge=${ menge }.` );
+
+    // Subscription-Event für geänderte Menge senden
+    pubsub.publish( "MENGE_GEAENDERT", { mengeGeaendert: artikel } );
     return artikel;
   },
 
@@ -154,30 +160,37 @@ const resolversMutation = {
 
     artikel.preis = preis;
     logger.info( `Artikel-Preis aktualisiert: ID=${ artikelId }, Preis=${ preis }.` );
+
+    // Subscription-Event für geänderten Preis senden
+    pubsub.publish( "PREIS_GEAENDERT", { preisGeaendert: artikel } );
     return artikel;
   }
 };
 
 
-
-
-/*
 const resolversSubscription = {
 
-      buchHinzugefuegt: {
-        subscribe: () => pubsub.subscribe( "BUCH_HINZUGEFUEGT" )
-      }
+  artikelHinzugefuegt: {
+    subscribe: () => pubsub.subscribe( "ARTIKEL_HINZUGEFUEGT" )
+  },
+
+  mengeGeaendert: {
+    subscribe: () => pubsub.subscribe( "MENGE_GEAENDERT" )
+  },
+
+  preisGeaendert: {
+    subscribe: () => pubsub.subscribe( "PREIS_GEAENDERT" )
+  }
 };
-*/
+
 
 export const yoga = createYoga({
   schema: createSchema({
     typeDefs: schemaString,
     resolvers: {
       Query       : resolversQuery,
-      Mutation    : resolversMutation /*,
+      Mutation    : resolversMutation,
       Subscription: resolversSubscription
-      */
     }
   })
 });

@@ -22,6 +22,8 @@ unter der folgenden URL erreichbar ist: http://localhost:8080/graphql
 
 <br>
 
+### Queries für Abfragen ###
+
 Alle Artikel abfragen:
 
 ```
@@ -67,6 +69,10 @@ query {
   }
 }
 ```
+
+<br>
+
+### Änderungsoperationen ###
 
 <br>
 
@@ -124,6 +130,58 @@ Artikel anhand ID löschen:
 ```
 mutation {
   artikelLoeschen(artikelId: "2") {
+    id
+    name
+    preis
+  }
+}
+```
+
+<br>
+
+## Änderungen abonnieren ##
+
+<br>
+
+![Screenshot: GraphiQL-UI während Subscription](screenshot_2.png)
+
+<br>
+
+Abo für neue Produkte:
+
+```
+subscription {
+  artikelHinzugefuegt {
+    id
+    name
+    preis
+    menge
+    grosskundenrabatt
+  }
+}
+```
+
+<br>
+
+Abo für Aktualisierung der Menge:
+
+```
+mutation {
+  mengeAktualisieren(artikelId: "3", menge: 42) {
+    id
+    name
+    menge
+  }
+}
+```
+
+<br>
+
+Abo für Aktualisierung des Preis:
+
+```
+mutation {
+  preisAktualisieren(artikelId: "4", preis: 349.99) {
     id
     name
     preis
