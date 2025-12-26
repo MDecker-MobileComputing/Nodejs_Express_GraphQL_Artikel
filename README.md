@@ -143,6 +143,10 @@ mutation {
 
 <br>
 
+Mit GraphQL kann auch eine "Subscription" definiert werden, so dass wir sofort über bestimmte Datenänderungen informiert werden.
+
+<br>
+
 ![Screenshot: GraphiQL-UI während Subscription](screenshot_2.png)
 
 <br>
@@ -201,3 +205,4 @@ See the [LICENSE file](LICENSE.md) for license rights and limitations (BSD 3-Cla
 for the files in this repository.
 
 <br>
+
