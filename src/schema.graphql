@@ -1,38 +1,67 @@
-type Buch {
+type Warengruppe {
+  id          : ID!
+  name        : String!
+  beschreibung: String
+}
 
-  id   : ID!
-  titel: String!
-  autor: String!
-  jahr : Int
-  genre: String
+
+type Artikel {
+  id               : ID!
+  name             : String!
+  beschreibung     : String
+  warengruppe      : Warengruppe!
+  menge            : Int!
+  preis            : Float!
+  grosskundenrabatt: Boolean!
 }
 
 
 # "Query" ist der Operationstyp für alle GraphQL-Lese-Anfragen ("R" in "CRUD")
 type Query {
 
-  # alle Buecher holen
-  buecher: [ Buch! ]!
+  # alle Artikel holen
+  artikel: [ Artikel! ]!
 
-  # Buch anhand ID abfragen
-  buch( id: ID! ): Buch
+  # Artikel anhand ID abfragen
+  artikel( id: ID! ): Artikel
 
-  # Buch suchen
-  sucheBuch( query: String! ): [Buch!]!
+  # Volltextsuche in Artikel (Name und Beschreibung)
+  artikelSuche( query: String! ): [ Artikel! ]!
+
+  # alle Warengruppen holen
+  warengruppen: [ Warengruppe! ]!
+
+  # Warengruppe anhand ID abfragen
+  warengruppe( id: ID! ): Warengruppe
 }
 
 
 # "Mutation" ist der Operationstyp für alle GraphQL-Schreib-Anfragen ("C", "U", "D" in "CRUD")
 type Mutation {
 
-  # Neues Buch hinzufügen
-  buchHinzufuegen( titel: String!, autor: String!, jahr: Int, genre: String ): Buch!
+  # Neue Warengruppe hinzufügen
+  warenGruppeHinzufuegen( name: String!, beschreibung: String ): Warengruppe!
+
+  # Neuen Artikel hinzufügen
+  artikelHinzufuegen( name: String!, beschreibung: String, warengruppeId: ID!, menge: Int!, preis: Float! ): Artikel!
+
+  # Artikel-Menge aktualisieren
+  mengeAktualisieren( artikelId: ID!, menge: Int! ): Artikel!
+
+  # Artikel-Preis aktualisieren
+  preisAktualisieren( artikelId: ID!, preis: Float! ): Artikel!
 }
 
 
 # "Subscription" ist der Operationstyp für Echtzeit-Updates
 type Subscription {
 
-  # Benachrichtigung wenn ein neues Buch hinzugefügt wird
-  buchHinzugefuegt: Buch!
+  # Benachrichtigung wenn ein neuer Artikel hinzugefügt wird
+  artikelHinzugefuegt: Artikel!
+
+  # Benachrichtigung wenn Artikel-Menge sich ändert
+  mengeGeaendert: Artikel!
+
+  # Benachrichtigung wenn Artikel-Preis sich ändert
+  preisGeaendert: Artikel!
 }
