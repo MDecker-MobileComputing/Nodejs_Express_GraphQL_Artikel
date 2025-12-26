@@ -166,8 +166,8 @@ subscription {
 Abo für Aktualisierung der Menge:
 
 ```
-mutation {
-  mengeAktualisieren(artikelId: "3", menge: 42) {
+subscription {
+  mengeGeaendert {
     id
     name
     menge
@@ -180,8 +180,8 @@ mutation {
 Abo für Aktualisierung des Preis:
 
 ```
-mutation {
-  preisAktualisieren(artikelId: "4", preis: 349.99) {
+subscription {
+  preisGeaendert {
     id
     name
     preis
