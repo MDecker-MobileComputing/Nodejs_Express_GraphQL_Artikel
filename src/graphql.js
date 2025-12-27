@@ -5,7 +5,7 @@ import { createSchema, createYoga, createPubSub } from "graphql-yoga";
 
 
 const logger = createLogger( "graphql" );
-const pubsub = createPubSub();
+const pubsub = createPubSub(); // um Änderungs-Events an Subscriber zu verschicken
 
 
 // Schema aus separater Datei einlesen
@@ -116,8 +116,14 @@ const resolversMutation = {
     alleArtikelArray.push( neuesArtikelObj );
     logger.info( `Neuer Artikel hinzugefügt: ID=${ neueId }, Name="${ name }".` );
 
-    // Subscription-Event für neuen Artikel senden
-    pubsub.publish( "ARTIKEL_HINZUGEFUEGT", { artikelHinzugefuegt: neuesArtikelObj } );
+    // Unified Subscription-Event für neuen Artikel senden
+    pubsub.publish( "ARTIKEL_GEAENDERT", {
+      artikelGeaendert: {
+        art    : "HINZUGEFUEGT",
+        felder : [ "name", "beschreibung", "menge", "preis", "grosskundenrabatt" ],
+        artikel: neuesArtikelObj
+      }
+    } );
 
     return neuesArtikelObj;
   },
@@ -133,53 +139,71 @@ const resolversMutation = {
     const [ geloeschterArtikel ] = alleArtikelArray.splice( idx, 1 );
     logger.info( `Artikel gelöscht: ID=${ artikelId }, Name="${ geloeschterArtikel.name }".` );
 
+    // Unified Subscription-Event für gelöschten Artikel senden
+    pubsub.publish( "ARTIKEL_GEAENDERT", {
+      artikelGeaendert: {
+        art    : "GELOESCHT",
+        felder : [],
+        artikel: geloeschterArtikel
+      }
+    } );
+
     return geloeschterArtikel;
   },
 
-  mengeAktualisieren: ( _, { artikelId, menge } ) => {
+  artikelAktualisieren: ( _, { artikelId, input } ) => {
+
     const artikel = alleArtikelArray.find( a => a.id === artikelId );
     if ( !artikel ) {
+
       logger.warn( `Artikel mit ID=${ artikelId } nicht gefunden.` );
-      return null;
+      return {
+        id               : artikelId,
+        name             : "Nicht gefunden",
+        beschreibung     : `Zu ändernder Artikel mit ID=${ artikelId } nicht gefunden.`,
+        menge            : 0,
+        preis            : 0,
+        grosskundenrabatt: false
+      };
     }
 
-    artikel.menge = menge;
-    logger.info( `Artikel-Menge aktualisiert: ID=${ artikelId }, Menge=${ menge }.` );
+    const moeglicheFelder = [ "name", "beschreibung", "menge", "preis", "grosskundenrabatt" ];
+    const geaenderteFelder = [];
 
-    // Subscription-Event für geänderte Menge senden
-    pubsub.publish( "MENGE_GEAENDERT", { mengeGeaendert: artikel } );
-    return artikel;
-  },
-
-  preisAktualisieren: ( _, { artikelId, preis } ) => {
-    const artikel = alleArtikelArray.find( a => a.id === artikelId );
-    if ( !artikel ) {
-      logger.warn( `Artikel mit ID=${ artikelId } nicht gefunden.` );
-      return null;
+    for ( const feld of moeglicheFelder ) {
+      if ( Object.prototype.hasOwnProperty.call( input, feld ) ) {
+        const neuerWert = input[ feld ];
+        if ( artikel[ feld ] !== neuerWert ) {
+          artikel[ feld ] = neuerWert;
+          geaenderteFelder.push( feld );
+        }
+      }
     }
 
-    artikel.preis = preis;
-    logger.info( `Artikel-Preis aktualisiert: ID=${ artikelId }, Preis=${ preis }.` );
+    if ( geaenderteFelder.length === 0 ) {
+      logger.info( `Keine Änderung ausgeführt für Artikel ID=${ artikelId }.` );
+      return artikel;
+    }
 
-    // Subscription-Event für geänderten Preis senden
-    pubsub.publish( "PREIS_GEAENDERT", { preisGeaendert: artikel } );
+    logger.info( `Artikel aktualisiert: ID=${ artikelId }, Felder=${ geaenderteFelder.join( "," ) }.` );
+
+    // Unified Subscription-Event für Änderungen senden
+    pubsub.publish( "ARTIKEL_GEAENDERT", {
+      artikelGeaendert: {
+        art    : "AKTUALISIERT",
+        felder : geaenderteFelder,
+        artikel: artikel
+      }
+    } );
+
     return artikel;
   }
 };
 
 
 const resolversSubscription = {
-
-  artikelHinzugefuegt: {
-    subscribe: () => pubsub.subscribe( "ARTIKEL_HINZUGEFUEGT" )
-  },
-
-  mengeGeaendert: {
-    subscribe: () => pubsub.subscribe( "MENGE_GEAENDERT" )
-  },
-
-  preisGeaendert: {
-    subscribe: () => pubsub.subscribe( "PREIS_GEAENDERT" )
+  artikelGeaendert: {
+    subscribe: () => pubsub.subscribe( "ARTIKEL_GEAENDERT" )
   }
 };
 

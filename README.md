@@ -81,14 +81,16 @@ Neuen Artikel hinzufügen:
 ```
 mutation {
   artikelHinzufuegen(
-    name: "MacBook Air 15"
-    beschreibung: "M3, 16GB, 512GB"
-    menge: 7
-    preis: 1999.0
-    grosskundenrabatt: true
+    name: "USB-C Netzteil 65W"
+    beschreibung: "Kompaktes Schnelllade-Netzteil"
+    menge: 25
+    preis: 39.9
+    grosskundenrabatt: false
   ) {
     id
     name
+    beschreibung
+    menge
     preis
     grosskundenrabatt
   }
@@ -97,42 +99,17 @@ mutation {
 
 <br>
 
-Menge für einen Artikel aktualisiert:
-
+Preis und Menge von Artikel ändern:
 ```
 mutation {
-  mengeAktualisieren(artikelId: "3", menge: 42) {
+  artikelAktualisieren(
+    artikelId: "2"
+    input: { preis: 899.99, menge: 8 }
+  ) {
     id
     name
+    preis
     menge
-  }
-}
-```
-
-<br>
-
-Preis für einen Artikel aktualisiert:
-
-```
-mutation {
-  preisAktualisieren(artikelId: "4", preis: 349.99) {
-    id
-    name
-    preis
-  }
-}
-```
-
-<br>
-
-Artikel anhand ID löschen:
-
-```
-mutation {
-  artikelLoeschen(artikelId: "2") {
-    id
-    name
-    preis
   }
 }
 ```
@@ -143,7 +120,7 @@ mutation {
 
 <br>
 
-Mit GraphQL kann auch eine "Subscription" definiert werden, so dass wir sofort über bestimmte Datenänderungen informiert werden.
+Mit GraphQL kann auch eine "Subscription" (Abonnement) definiert werden, so dass wir sofort über bestimmte Datenänderungen informiert werden.
 
 <br>
 
@@ -151,47 +128,17 @@ Mit GraphQL kann auch eine "Subscription" definiert werden, so dass wir sofort �
 
 <br>
 
-Abo für neue Produkte:
 
 ```
 subscription {
-  artikelHinzugefuegt {
-    id
-    name
-    preis
-    menge
-    grosskundenrabatt
+  artikelGeaendert {
+    art
+    felder
   }
 }
 ```
 
-<br>
 
-Abo für Aktualisierung der Menge:
-
-```
-subscription {
-  mengeGeaendert {
-    id
-    name
-    menge
-  }
-}
-```
-
-<br>
-
-Abo für Aktualisierung des Preis:
-
-```
-subscription {
-  preisGeaendert {
-    id
-    name
-    preis
-  }
-}
-```
 
 <br>
 

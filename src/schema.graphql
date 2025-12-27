@@ -44,23 +44,38 @@ type Mutation {
   # Artikel löschen
   artikelLoeschen( artikelId: ID! ): Artikel
 
-  # Artikel-Menge aktualisieren
-  mengeAktualisieren( artikelId: ID!, menge: Int! ): Artikel!
+  # Artikel-Attribute in einem Schritt aktualisieren
+  artikelAktualisieren( artikelId: ID!, input: ArtikelUpdateInput! ): Artikel!
+}
 
-  # Artikel-Preis aktualisieren
-  preisAktualisieren( artikelId: ID!, preis: Float! ): Artikel!
+
+# Input-Typ für flexible Aktualisierungen (alle Felder optional)
+input ArtikelUpdateInput {
+  name             : String
+  beschreibung     : String
+  menge            : Int
+  preis            : Float
+  grosskundenrabatt: Boolean
+}
+
+# Änderungsart als Enum, für unified Subscription
+enum Aenderungsart {
+  HINZUGEFUEGT
+  AKTUALISIERT
+  GELOESCHT
+}
+
+# Payload für einheitliche Änderungen-Subscription
+type ArtikelAenderung {
+  art    : Aenderungsart!
+  felder : [ String! ]!
+  artikel: Artikel!
 }
 
 
 # "Subscription" ist der Operationstyp für Echtzeit-Updates
 type Subscription {
 
-  # Benachrichtigung wenn ein neuer Artikel hinzugefügt wird
-  artikelHinzugefuegt: Artikel!
-
-  # Benachrichtigung wenn Artikel-Menge sich ändert
-  mengeGeaendert: Artikel!
-
-  # Benachrichtigung wenn Artikel-Preis sich ändert
-  preisGeaendert: Artikel!
+  # Ein Subscription-Typ für alle Arten von Änderungen
+  artikelGeaendert: ArtikelAenderung!
 }
