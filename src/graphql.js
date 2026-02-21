@@ -119,7 +119,6 @@ const resolversMutation = {
     alleArtikelArray.push( neuesArtikelObj );
     logger.info( `Neuer Artikel hinzugefügt: ID=${ neueId }, Name="${ name }".` );
 
-    // Unified Subscription-Event für neuen Artikel senden
     pubsub.publish( "ARTIKEL_GEAENDERT", {
       artikelGeaendert: {
         art    : "HINZUGEFUEGT",
@@ -142,7 +141,6 @@ const resolversMutation = {
     const [ geloeschterArtikel ] = alleArtikelArray.splice( idx, 1 );
     logger.info( `Artikel gelöscht: ID=${ artikelId }, Name="${ geloeschterArtikel.name }".` );
 
-    // Unified Subscription-Event für gelöschten Artikel senden
     pubsub.publish( "ARTIKEL_GEAENDERT", {
       artikelGeaendert: {
         art    : "GELOESCHT",
@@ -174,9 +172,13 @@ const resolversMutation = {
     const geaenderteFelder = [];
 
     for ( const feld of moeglicheFelder ) {
+
       if ( Object.prototype.hasOwnProperty.call( input, feld ) ) {
+
         const neuerWert = input[ feld ];
+
         if ( artikel[ feld ] !== neuerWert ) {
+
           artikel[ feld ] = neuerWert;
           geaenderteFelder.push( feld );
         }
@@ -184,6 +186,7 @@ const resolversMutation = {
     }
 
     if ( geaenderteFelder.length === 0 ) {
+      
       logger.info( `Keine Änderung ausgeführt für Artikel ID=${ artikelId }.` );
       return artikel;
     }
