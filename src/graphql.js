@@ -5,7 +5,6 @@ import { createSchema, createYoga, createPubSub } from "graphql-yoga";
 
 
 const logger = createLogger( "graphql" );
-const pubsub = createPubSub(); // um Änderungs-Events an Subscriber zu verschicken
 
 
 // Schema aus separater Datei einlesen
@@ -94,9 +93,12 @@ const resolversQuery = {
 
 // Hilfsfunktion: nächste numerische ID finden
 const nextArtikelId = () => {
+
   const maxId = alleArtikelArray.reduce( (max, a) => Math.max( max, Number( a.id ) || 0 ), 0 );
   return String( maxId + 1 );
 };
+
+const pubsub = createPubSub(); // um Änderungs-Events an Subscriber zu verschicken
 
 
 const resolversMutation = {
