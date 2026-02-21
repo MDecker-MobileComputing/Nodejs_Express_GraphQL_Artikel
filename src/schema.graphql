@@ -39,7 +39,12 @@ type Query {
 type Mutation {
 
   # Neuen Artikel hinzufügen
-  artikelHinzufuegen( name: String!, beschreibung: String, menge: Int!, preis: Float!, grosskundenrabatt: Boolean = false ): Artikel!
+  artikelHinzufuegen( name             : String!, 
+                      beschreibung     : String, 
+                      menge            : Int!, 
+                      preis            : Float!, 
+                      grosskundenrabatt: Boolean = false 
+                    ): Artikel!
 
   # Artikel löschen
   artikelLoeschen( artikelId: ID! ): Artikel
