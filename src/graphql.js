@@ -91,14 +91,15 @@ const resolversQuery = {
       }
 };
 
-// Hilfsfunktion: nächste numerische ID finden
+
 const nextArtikelId = () => {
 
   const maxId = alleArtikelArray.reduce( (max, a) => Math.max( max, Number( a.id ) || 0 ), 0 );
   return String( maxId + 1 );
 };
 
-const pubsub = createPubSub(); // um Änderungs-Events an Subscriber zu verschicken
+
+const pubsub = createPubSub();
 
 
 const resolversMutation = {
