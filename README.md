@@ -151,6 +151,10 @@ subscription {
   artikelGeaendert {
     art
     felder
+    artikel {
+      id
+      name
+    }
   }
 }
 ```
