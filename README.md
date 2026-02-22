@@ -65,6 +65,7 @@ query {
   artikelSuche( query: "monitor" ) {
     id
     name
+    beschreibung
     preis
   }
 }
