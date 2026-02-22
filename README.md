@@ -117,6 +117,22 @@ mutation {
 
 <br>
 
+Datensatz löschen:
+```
+mutation {
+  artikelLoeschen(
+    artikelId: "2"
+  ) {
+    id
+    name
+    preis
+    menge
+  }
+}
+```  
+
+<br>
+
 ## Änderungen abonnieren ##
 
 <br>
