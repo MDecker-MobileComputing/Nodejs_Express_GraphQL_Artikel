@@ -2,7 +2,7 @@
 
 <br>
 
-Dieses Repository enthält eine Nodejs-Anwendung mit Express.js und [graphql-yoga](https://www.npmjs.com/package/graphql-yoga), 
+Dieses Repository enthält eine Nodejs-Anwendung mit Express.js und [graphql-yoga](https://www.npmjs.com/package/graphql-yoga),
 die eine GraphQL-API mit Artikeldaten bereitstellt.
 
 <br>
@@ -129,7 +129,7 @@ mutation {
     menge
   }
 }
-```  
+```
 
 <br>
 
@@ -137,14 +137,14 @@ mutation {
 
 <br>
 
-Mit GraphQL kann auch eine "Subscription" (Abonnement) definiert werden, so dass wir sofort über bestimmte Datenänderungen informiert werden.
+Mit GraphQL kann auch eine "Subscription" (Abonnement) definiert werden,
+so dass wir sofort über bestimmte Datenänderungen informiert werden.
 
 <br>
 
 ![Screenshot: GraphiQL-UI während Subscription](screenshot_2.png)
 
 <br>
-
 
 ```
 subscription {
