@@ -8,13 +8,13 @@ const logger = createLogger( "main" );
 const PORT_NUMMER = 8080;
 
 
-const app = express()
+const expressObjekt = express()
 
 // Yoga als Handler für /graphql verwenden (inkl. GraphiQL UI)
-app.use( "/graphql", yoga );
+expressObjekt.use( "/graphql", yoga );
 
-app.use( express.static( "public" ) );
+expressObjekt.use( express.static( "public" ) );
 
-app.listen( PORT_NUMMER, () => {
+expressObjekt.listen( PORT_NUMMER, () => {
   logger.info( `Server läuft auf http://localhost:${ PORT_NUMMER }` );
 });
